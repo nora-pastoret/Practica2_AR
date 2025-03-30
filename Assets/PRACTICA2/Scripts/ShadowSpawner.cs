@@ -22,7 +22,7 @@ public class ShadowSpawner : MonoBehaviour
 
             foreach (ARPlane plane in allPlanes)
             {
-                if (!spawnedPlanes.Contains(plane)) // Només afegir peixos si encara no hi ha en aquest pla
+                if (!spawnedPlanes.Contains(plane)) // Nom?s afegir peixos si encara no hi ha en aquest pla
                 {
                     Debug.Log("Generant peixos per a un nou ARPlane.");
                     SpawnFishOnPlane(plane);
@@ -30,7 +30,7 @@ public class ShadowSpawner : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(1f); // Espera per evitar sobrecàrrega
+            yield return new WaitForSeconds(1f); // Espera per evitar sobrec?rrega
         }
     }
 
