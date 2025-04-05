@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8478403811423840551}
   - component: {fileID: 5584722031415829306}
   - component: {fileID: -1212653822928029726}
+  - component: {fileID: -263631939590991379}
   m_Layer: 0
   m_Name: Shadow
   m_TagString: FishShadow
@@ -100,7 +101,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -122,3 +123,15 @@ MonoBehaviour:
     type: 3}
   fishName: Nombre del Pez
   fishDescription: "Descripci\xF3n detallada del pez..."
+--- !u!114 &-263631939590991379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6455100453163575128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f31db15d9274b494a83b06d8eebe26b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
