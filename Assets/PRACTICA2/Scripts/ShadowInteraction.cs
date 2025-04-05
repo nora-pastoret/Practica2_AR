@@ -27,10 +27,22 @@ public class ShadowInteraction : MonoBehaviour
     {
         if (fishPrefab != null)
         {
-            // 1. Instanciar el pez en la misma posición y rotación que la sombra
-            Instantiate(fishPrefab, transform.position, transform.rotation);
+            // Instanciar el pez en la posición de la sombra
+            GameObject fish = Instantiate(fishPrefab, transform.position, transform.rotation);
 
-            // 2. Mostrar la información en la UI
+            // Fijarlo a la cámara para que se mueva con ella
+            if (Camera.main != null)
+            {
+                fish.transform.SetParent(Camera.main.transform, false);
+                // Posicionarlo, por ejemplo, 1 metro adelante de la cámara
+                fish.transform.localPosition = new Vector3(0, 0, 1.0f);
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró la cámara principal.");
+            }
+
+            // Mostrar la información en la UI
             if (uiManager != null)
             {
                 uiManager.ShowFishInfo(fishName, fishDescription);
@@ -40,7 +52,7 @@ public class ShadowInteraction : MonoBehaviour
                 Debug.LogWarning("UIManager no encontrado, no se puede mostrar la info.");
             }
 
-            // 3. Destruir el objeto de la sombra
+            // Destruir el objeto sombra
             Destroy(gameObject);
         }
         else
@@ -48,4 +60,5 @@ public class ShadowInteraction : MonoBehaviour
             Debug.LogError("¡FishPrefab no asignado en el Inspector para esta sombra!");
         }
     }
+
 }
