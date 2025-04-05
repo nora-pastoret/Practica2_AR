@@ -1,25 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // Necesario para TextMeshPro
-using UnityEngine.UI; // Necesario para Button
+using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject infoPanel; // Arrastra aquí el Panel de la UI desde la jerarquía
-    public TextMeshProUGUI fishNameText; // Arrastra aquí el TextMeshPro para el nombre
-    public TextMeshProUGUI fishDescriptionText; // Arrastra aquí el TextMeshPro para la descripción
-    public Button closeButton; // Arrastra aquí el botón de cerrar
+    public GameObject infoPanel;
+    public TextMeshProUGUI fishNameText;
+    public TextMeshProUGUI fishDescriptionText;
+    public Button closeButton;
+
+    // Variable para almacenar el pez que se ha fijado a la cámara
+    private GameObject currentFish;
 
     void Start()
     {
-        // Asegúrate de que el panel esté oculto al inicio
         if (infoPanel != null)
         {
             infoPanel.SetActive(false);
         }
 
-        // Añade la funcionalidad al botón de cerrar
         if (closeButton != null)
         {
             closeButton.onClick.AddListener(HideFishInfo);
@@ -30,14 +31,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Función para mostrar la información
+    // Método para asignar el pez actual
+    public void SetCurrentFish(GameObject fish)
+    {
+        currentFish = fish;
+    }
+
     public void ShowFishInfo(string name, string description)
     {
         if (infoPanel != null && fishNameText != null && fishDescriptionText != null)
         {
             fishNameText.text = name;
             fishDescriptionText.text = description;
-            infoPanel.SetActive(true); // Muestra el panel
+            infoPanel.SetActive(true);
         }
         else
         {
@@ -45,12 +51,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Función para ocultar la información (llamada por el botón)
+    // Al cerrar el panel, destruir el pez si existe
     public void HideFishInfo()
     {
         if (infoPanel != null)
         {
-            infoPanel.SetActive(false); // Oculta el panel
+            infoPanel.SetActive(false);
+        }
+
+        if (currentFish != null)
+        {
+            Destroy(currentFish);
+            currentFish = null;
         }
     }
 }

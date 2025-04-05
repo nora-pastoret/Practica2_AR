@@ -34,7 +34,6 @@ public class ShadowInteraction : MonoBehaviour
             if (Camera.main != null)
             {
                 fish.transform.SetParent(Camera.main.transform, false);
-                // Posicionarlo, por ejemplo, 1 metro adelante de la cámara
                 fish.transform.localPosition = new Vector3(0, 0, 1.0f);
             }
             else
@@ -42,9 +41,10 @@ public class ShadowInteraction : MonoBehaviour
                 Debug.LogWarning("No se encontró la cámara principal.");
             }
 
-            // Mostrar la información en la UI
+            // Enviar la referencia del pez al UIManager
             if (uiManager != null)
             {
+                uiManager.SetCurrentFish(fish);
                 uiManager.ShowFishInfo(fishName, fishDescription);
             }
             else
