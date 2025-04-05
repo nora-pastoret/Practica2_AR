@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5584722031415829306}
   - component: {fileID: -1212653822928029726}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Shadow
   m_TagString: FishShadow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

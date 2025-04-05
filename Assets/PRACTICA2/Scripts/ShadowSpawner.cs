@@ -5,42 +5,94 @@ using UnityEngine.XR.ARFoundation;
 
 public class ShadowSpawner : MonoBehaviour
 {
+    
     public GameObject FishShadow;
-    private ARPlane[] allPlanes;
-    private HashSet<ARPlane> spawnedPlanes = new HashSet<ARPlane>(); // Guarda els plans on ja hem generat peixos
+    
+    public float fishDensity = 1f; // numero de peixos per metre quadrat - per exemple, 1 peix per m²
 
-    void Start()
+    // Guarda el nombre de peixos ja instanciats per cada ARPlane
+    private Dictionary<ARPlane, int> fishCountByPlane = new Dictionary<ARPlane, int>();
+
+    void OnEnable()
     {
-        StartCoroutine(WaitForPlanesAndSpawn());
+        // Ens subscrivim als canvis de plans del ARPlaneManager
+        ARPlaneManager planeManager = FindObjectOfType<ARPlaneManager>();
+        if (planeManager != null)
+        {
+            planeManager.planesChanged += OnPlanesChanged;
+        }
     }
 
-    IEnumerator WaitForPlanesAndSpawn()
+    void OnDisable()
     {
-        while (true)
+        ARPlaneManager planeManager = FindObjectOfType<ARPlaneManager>();
+        if (planeManager != null)
         {
-            allPlanes = GameObject.FindObjectsByType<ARPlane>(FindObjectsSortMode.InstanceID);
+            planeManager.planesChanged -= OnPlanesChanged;
+        }
+    }
 
-            foreach (ARPlane plane in allPlanes)
+    // Gestió d'events quan hi ha nous plans, actualitzacions o eliminacions
+    void OnPlanesChanged(ARPlanesChangedEventArgs args)
+    {
+        // Per als nous plans:
+        foreach (ARPlane plane in args.added)
+        {
+            fishCountByPlane[plane] = 0;
+            plane.boundaryChanged += OnPlaneBoundaryChanged;
+            UpdateFishOnPlane(plane);
+        }
+
+        // Per als plans actualitzats:
+        foreach (ARPlane plane in args.updated)
+        {
+            UpdateFishOnPlane(plane);
+        }
+
+        // Neteja per als plans eliminats:
+        foreach (ARPlane plane in args.removed)
+        {
+            if (fishCountByPlane.ContainsKey(plane))
+                fishCountByPlane.Remove(plane);
+        }
+    }
+
+    // Quan la frontera del pla canvia (és a dir, pot haver creixement)
+    void OnPlaneBoundaryChanged(ARPlaneBoundaryChangedEventArgs eventArgs)
+    {
+        UpdateFishOnPlane(eventArgs.plane);
+    }
+
+    // Actualitza el nombre de peixos d'un pla segons la seva mida
+    void UpdateFishOnPlane(ARPlane plane)
+    {
+        // Calcular àrea del pla (aproximació amb extents, que són la meitat de la mida)
+        float area = (plane.extents.x * 2) * (plane.extents.y * 2);
+        int desiredFishCount = Mathf.FloorToInt(area * fishDensity);
+
+        // Obtenir el nombre actual de peixos instanciats per aquest pla
+        int currentFishCount = fishCountByPlane.ContainsKey(plane) ? fishCountByPlane[plane] : 0;
+        int fishToSpawn = desiredFishCount - currentFishCount;
+
+        if (fishToSpawn > 0)
+        {
+            // Instanciem els nous peixos necessaris
+            for (int i = 0; i < fishToSpawn; i++)
             {
-                if (!spawnedPlanes.Contains(plane)) // Nom?s afegir peixos si encara no hi ha en aquest pla
-                {
-                    Debug.Log("Generant peixos per a un nou ARPlane.");
-                    SpawnFishOnPlane(plane);
-                    spawnedPlanes.Add(plane); // Marquem aquest ARPlane com a ja fet
-                }
+                Vector3 spawnPos = GetRandomPointInPlane(plane);
+                // Es pot fer fill del pla per mantenir la posició relativa en cas de moviment o actualització
+                Instantiate(FishShadow, spawnPos, Quaternion.identity, plane.transform);
             }
-
-            yield return new WaitForSeconds(1f); // Espera per evitar sobrec?rrega
+            fishCountByPlane[plane] = desiredFishCount;
         }
     }
 
-    void SpawnFishOnPlane(ARPlane plane)
+    // Retorna un punt aleatori dins del pla utilitzant els extents
+    Vector3 GetRandomPointInPlane(ARPlane plane)
     {
-        Debug.Log("Spawnejant 5 peixos sobre un ARPlane.");
-        for (int i = 0; i < 5; i++)
-        {
-            Vector3 position = plane.transform.position + new Vector3(Random.Range(-3.0f, 3.0f), 0, Random.Range(-3.0f, 3.0f));
-            Instantiate(FishShadow, position, Quaternion.identity);
-        }
+        float randomX = Random.Range(-plane.extents.x, plane.extents.x);
+        float randomZ = Random.Range(-plane.extents.y, plane.extents.y);
+        Vector3 localPos = new Vector3(randomX, 0, randomZ);
+        return plane.transform.TransformPoint(localPos);
     }
 }
