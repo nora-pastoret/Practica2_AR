@@ -153,6 +153,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FishShadow: {fileID: 6455100453163575128, guid: fed6c17e3d6c04f49aa335d7eef17774,
     type: 3}
+  fishDensity: 1
+  fishRadius: 0.4
 --- !u!4 &43168338
 Transform:
   m_ObjectHideFlags: 0
