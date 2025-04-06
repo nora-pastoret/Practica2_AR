@@ -127,20 +127,20 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 1b9b84b1af1f5f7419f21cf326c2c82a, type: 3}
   - {fileID: 919132149155446097, guid: 9211966354adf98439bb197b75429dc7, type: 3}
   - {fileID: 6318457721519590056, guid: 6dc3f6a67f098405f9924207f82e8dc4, type: 3}
-  - {fileID: 6318457721519590056, guid: 0459c5963deae4aab88b287e4dccc94c, type: 3}
-  - {fileID: 6318457721519590056, guid: b8a1d3329e6e245c5b957665498ce1b8, type: 3}
-  - {fileID: 6318457721519590056, guid: e864b71f263a549b1884a4f6c9669465, type: 3}
+  - {fileID: 919132149155446097, guid: 02c79473fa460494bbe05c6ed5ba49ef, type: 3}
+  - {fileID: 919132149155446097, guid: eafa1b7ab8541044f87989a921d26fb2, type: 3}
+  - {fileID: 919132149155446097, guid: bdae72103079ba3428650c3d17189b74, type: 3}
   fishNames:
-  - Pez payaso
-  - Pez espada
-  - "Pira\xF1a"
-  - anchoa
-  - salmon
-  - lubina
-  - 'botella '
-  - koi
-  - jurel
-  - compresa
+  - Anchovy
+  - Horse Mackerel
+  - Koi
+  - Pale Chub
+  - Salmon
+  - Sea Bass
+  - Bottle
+  - Pond Smelt
+  - Red Snapper
+  - Can
   fishDescriptions:
   - Es un payaso como tu
   - uy que pincha
