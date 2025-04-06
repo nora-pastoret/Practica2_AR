@@ -41,6 +41,10 @@ public class ShadowInteraction : MonoBehaviour
             {
                 fish.transform.SetParent(Camera.main.transform, false);
                 fish.transform.localPosition = new Vector3(0, 0.2f, 1.0f);
+                fish.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+
+
+
             }
             else
             {
