@@ -5,10 +5,10 @@ using TMPro; // Necesario si usas TextMeshPro para el texto
 
 public class ShadowInteraction : MonoBehaviour
 {
-    public GameObject fishPrefab; // Arrastra aquí el prefab del PEZ correspondiente a esta sombra
-    public string fishName = "Nombre del Pez"; // Nombre para mostrar
-    [TextArea(3, 10)] // Hace el campo de texto más grande en el Inspector
-    public string fishDescription = "Descripción detallada del pez...";
+    public GameObject[] fishPrefabs; // Array de prefabs de peces
+    public string[] fishNames; // Array de nombres de peces
+    [TextArea(3, 10)]
+    public string[] fishDescriptions; // Array de descripciones de peces
 
     private UIManager uiManager; // Referencia al gestor de UI
 
@@ -25,16 +25,22 @@ public class ShadowInteraction : MonoBehaviour
     // Esta función será llamada desde otro script cuando se toque esta sombra
     public void RevealFish()
     {
-        if (fishPrefab != null)
+        if (fishPrefabs != null && fishPrefabs.Length > 0)
         {
+            // Seleccionar un pez al azar
+            int randomIndex = Random.Range(0, fishPrefabs.Length);
+            GameObject selectedFishPrefab = fishPrefabs[randomIndex];
+            string selectedFishName = fishNames[randomIndex];
+            string selectedFishDescription = fishDescriptions[randomIndex];
+
             // Instanciar el pez en la posición de la sombra
-            GameObject fish = Instantiate(fishPrefab, transform.position, transform.rotation);
+            GameObject fish = Instantiate(selectedFishPrefab, transform.position, transform.rotation);
 
             // Fijarlo a la cámara para que se mueva con ella
             if (Camera.main != null)
             {
                 fish.transform.SetParent(Camera.main.transform, false);
-                fish.transform.localPosition = new Vector3(0, 0, 1.0f);
+                fish.transform.localPosition = new Vector3(0, 0.2f, 1.0f);
             }
             else
             {
@@ -45,7 +51,7 @@ public class ShadowInteraction : MonoBehaviour
             if (uiManager != null)
             {
                 uiManager.SetCurrentFish(fish);
-                uiManager.ShowFishInfo(fishName, fishDescription);
+                uiManager.ShowFishInfo(selectedFishName, selectedFishDescription);
             }
             else
             {
@@ -57,8 +63,7 @@ public class ShadowInteraction : MonoBehaviour
         }
         else
         {
-            Debug.LogError("¡FishPrefab no asignado en el Inspector para esta sombra!");
+            Debug.LogError("¡No hay prefabs de peces asignados en el Inspector!");
         }
     }
-
 }

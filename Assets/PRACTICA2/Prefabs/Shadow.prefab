@@ -119,10 +119,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f08a42ddebcc4970ab2fb73b2d89d0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishPrefab: {fileID: 8986328500875594450, guid: d825bbdf58c379d4290da92e387f71d0,
-    type: 3}
-  fishName: Nombre del Pez
-  fishDescription: "Descripci\xF3n detallada del pez..."
+  fishPrefabs:
+  - {fileID: 6318457721519590056, guid: 71490ecb4b4424940a31a4d5849a0a40, type: 3}
+  - {fileID: 6318457721519590056, guid: f9cd29359201149b09c33a48d60bfe1d, type: 3}
+  - {fileID: 6318457721519590056, guid: 2a467d548e47c43949027a9b6d2f983e, type: 3}
+  - {fileID: 6318457721519590056, guid: 889114a4fbca748db821e0df9a069307, type: 3}
+  - {fileID: 6318457721519590056, guid: e16030bfca4a04c008eded8a0d2cdd66, type: 3}
+  - {fileID: 6318457721519590056, guid: 5e6733c91e89643acb3dd02d252e6eab, type: 3}
+  - {fileID: 6318457721519590056, guid: 6dc3f6a67f098405f9924207f82e8dc4, type: 3}
+  - {fileID: 6318457721519590056, guid: 0459c5963deae4aab88b287e4dccc94c, type: 3}
+  - {fileID: 6318457721519590056, guid: b8a1d3329e6e245c5b957665498ce1b8, type: 3}
+  - {fileID: 6318457721519590056, guid: e864b71f263a549b1884a4f6c9669465, type: 3}
+  fishNames:
+  - Pez payaso
+  - Pez espada
+  - "Pira\xF1a"
+  - anchoa
+  - salmon
+  - lubina
+  - 'botella '
+  - koi
+  - jurel
+  - compresa
+  fishDescriptions:
+  - Es un payaso como tu
+  - uy que pincha
+  - "\xF1am \xF1am"
+  - que ricas
+  - mon mon
+  - quien sabe como es una lubina
+  - saaaca la botella que no vamo a emborracha
+  - que koi?
+  - juraaaa juramelo
+  - usada ewwwwww
 --- !u!114 &-263631939590991379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,3 +164,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f31db15d9274b494a83b06d8eebe26b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkRadius: 0.5
