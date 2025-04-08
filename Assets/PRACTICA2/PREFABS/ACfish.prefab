@@ -63,6 +63,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ACfish
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 4dc2d7920c807a14b9aa9a54c1844d42,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: bf7e7840519310b4b84500365a08d27f, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 4dc2d7920c807a14b9aa9a54c1844d42,
+        type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
