@@ -176,16 +176,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fishPrefabs:
-  - {fileID: 919132149155446097, guid: ac74d5eaec1f3df43b4e79d8c629524b, type: 3}
-  - {fileID: 919132149155446097, guid: bb9a99cdf727369438e974ad1e288596, type: 3}
-  - {fileID: 919132149155446097, guid: f6fc5400a2b735344b67615ee5b86769, type: 3}
-  - {fileID: 919132149155446097, guid: ed28a735ed116334ca993e527fcdcad9, type: 3}
-  - {fileID: 919132149155446097, guid: 1b9b84b1af1f5f7419f21cf326c2c82a, type: 3}
-  - {fileID: 919132149155446097, guid: 9211966354adf98439bb197b75429dc7, type: 3}
+  - {fileID: 5571068817356788324, guid: a657e3635787ab346b18011746ceca9d, type: 3}
+  - {fileID: 6204106893402494466, guid: 29f65c25451628b48a960771b6dda5bd, type: 3}
+  - {fileID: 3630574270298354121, guid: 40c05759f1724b6449a2013f86cfa793, type: 3}
+  - {fileID: 8615136581445462663, guid: 82fe142659af0004c85c146aaabdb9f0, type: 3}
+  - {fileID: 5402207622849751754, guid: 2c4445ed22d5821459e8eef3543ae7cb, type: 3}
+  - {fileID: 6416139905465987826, guid: fbf29f83e2b44ea488a3d817ae25801a, type: 3}
   - {fileID: 6318457721519590056, guid: 6dc3f6a67f098405f9924207f82e8dc4, type: 3}
-  - {fileID: 919132149155446097, guid: 02c79473fa460494bbe05c6ed5ba49ef, type: 3}
-  - {fileID: 919132149155446097, guid: eafa1b7ab8541044f87989a921d26fb2, type: 3}
-  - {fileID: 919132149155446097, guid: bdae72103079ba3428650c3d17189b74, type: 3}
+  - {fileID: 5678887296983768340, guid: eddfcc0102f49eb4c8139d1c1ed6cef8, type: 3}
+  - {fileID: 4456185486775028409, guid: b629fb7233fcdd340a71f4a23e35874d, type: 3}
+  - {fileID: 2134721990122195262, guid: 9733a1fe8a5bf5a4c8c7bf68ec07a7d0, type: 3}
   fishNames:
   - Anchovy
   - Horse Mackerel
