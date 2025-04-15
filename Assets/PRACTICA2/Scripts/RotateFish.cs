@@ -26,7 +26,7 @@ using UnityEngine.InputSystem; // Nou sistema d'input
 
 public class RotateFish : MonoBehaviour
 {
-    public float velocidadDeRotacion = 0.2f;
+    public float velocidadDeRotacion = 0.02f;
     private Vector2? posicioAnterior = null;
 
     void Update()
