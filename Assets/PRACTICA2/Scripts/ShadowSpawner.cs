@@ -6,8 +6,8 @@ using UnityEngine.XR.ARFoundation;
 public class ShadowSpawner : MonoBehaviour
 {
     public GameObject FishShadow;
-    public float fishDensity = 1f; // n?mero de peces por m?
-    public float fishRadius = 0.4f; // Radio utilizado para comprobar solapamientos
+    public float fishDensity = 1f; // número de peixos per m²
+    public float fishRadius = 0.4f; // Radi utilitzat per comprovar solapametns
 
     private Dictionary<ARPlane, int> fishCountByPlane = new Dictionary<ARPlane, int>();
     private ARPlaneManager planeManager; // Guardar referencia para OnDisable
@@ -105,11 +105,11 @@ public class ShadowSpawner : MonoBehaviour
     {
         if (plane == null || plane.subsumedBy != null || plane.trackingState != UnityEngine.XR.ARSubsystems.TrackingState.Tracking)
         {
-            // No generar peces en planos no v?lidos, subsumidos o que no se est?n trackeando activamente
+            // No generar peces en planos no validos, subsumidos (?) o que no se esten trackeando activamente
             return;
         }
 
-        // calcula el ?rea del plano y cu?ntos peces tocar?an
+        //calcula l'area del pla i quan pexios tocarien
         float area = plane.size.x * plane.size.y; // Usar plane.size es m?s directo que extents
         int desiredFishCount = Mathf.FloorToInt(area * fishDensity);
 
@@ -121,20 +121,20 @@ public class ShadowSpawner : MonoBehaviour
         Debug.Log($"Actualizando plano {plane.trackableId}: Area={area:F2}, Desired={desiredFishCount}, Current={currentFishCount}, Spawning={fishToSpawn}");
 
 
-        // Para los solapamientos
+        //pels solapaments
         int tries = 0;
         int spawned = 0;
-        int maxTries = fishToSpawn * 10; // Aumentar intentos si el espacio es denso
+        int maxTries = fishToSpawn * 10; // intents
 
         while (spawned < fishToSpawn && tries < maxTries)
         {
-            Vector3 spawnPos = GetRandomPointInPlaneBounds(plane); // Usar un m?todo basado en l?mites
+            Vector3 spawnPos = GetRandomPointInPlaneBounds(plane); // basant en els limits
 
             if (IsPositionFree(spawnPos, fishRadius))
             {
                 // Instanciar como hijo del plano para que se mueva con ?l
                 GameObject fish = Instantiate(FishShadow, spawnPos, Quaternion.identity, plane.transform);
-                fish.tag = "FishShadow"; // para detectarlo m?s adelante si vols
+                fish.tag = "FishShadow"; // per detectar-ho més endavant si es necessita
                 spawned++;
             }
             tries++;
