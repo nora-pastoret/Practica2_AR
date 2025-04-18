@@ -49,7 +49,7 @@ public class ShadowSpawner : MonoBehaviour
 
     void OnPlanesChanged(ARPlanesChangedEventArgs args)
     {
-        Debug.Log($"Planes changed: Added={args.added.Count}, Updated={args.updated.Count}, Removed={args.removed.Count}");
+        //Debug.Log($"Planes changed: Added={args.added.Count}, Updated={args.updated.Count}, Removed={args.removed.Count}");
 
         foreach (ARPlane plane in args.added)
         {

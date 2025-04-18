@@ -4,6 +4,7 @@ using UnityEngine.InputSystem; // ¡Necesario para el Nuevo Sistema de Input!
 public class InputManager : MonoBehaviour
 {
     public Camera arCamera;
+    private UIManager uiManager;//per indicar que no es pugui interactuar amb shadows si està obert el panell d'info
 
     // Guarda una referencia a la acción de "presionar" si usas un Input Actions Asset (opcional pero recomendado)
     // public InputAction primaryPressAction; // Ejemplo si usas Input Actions Asset
@@ -25,11 +26,20 @@ public class InputManager : MonoBehaviour
     //     // primaryPositionAction?.Disable();
     // }
 
+    void Start()
+    {
+        uiManager = FindObjectOfType<UIManager>();
+        if (uiManager == null)
+        {
+            Debug.LogError("No s'ha trobat el UIManager!");
+        }
+    }
+
     void Update()
     {
         // Comprueba si hay un puntero activo (ratón, dedo en pantalla)
-        if (Pointer.current == null)
-            return; // Salir si no hay puntero
+        if (Pointer.current == null || uiManager == null || uiManager.IsInfoPanelActive())
+            return; // Sortir si no hi ha Punter o si el panell de info està actiu
 
         // Comprueba si el botón/dedo principal fue presionado en ESTE frame
         if (Pointer.current.press.wasPressedThisFrame)

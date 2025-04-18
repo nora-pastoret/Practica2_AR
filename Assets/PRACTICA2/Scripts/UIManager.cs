@@ -4,7 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation; // Necesario para ARSession
-using UnityEngine.XR.ARSubsystems; // Necesario para ARSessionState
+using UnityEngine.XR.ARSubsystems;
+using System; // Necesario para ARSessionState
 
 public class UIManager : MonoBehaviour
 {
@@ -140,5 +141,10 @@ public class UIManager : MonoBehaviour
         // }
 
         Debug.Log("Sesión AR reiniciada. Buscando nuevos planos...");
+    }
+
+    public bool IsInfoPanelActive()//per enviar la si està activat al InputManager
+    {
+        return infoPanel != null && infoPanel.activeSelf;
     }
 }
