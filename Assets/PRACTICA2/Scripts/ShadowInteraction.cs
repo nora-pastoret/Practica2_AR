@@ -1,33 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // Necesario si usas TextMeshPro para el texto
+using TMPro; // Necesari pel TextMeshPro
 
 public class ShadowInteraction : MonoBehaviour
 {
-    public GameObject[] fishPrefabs; // Array de prefabs de peces
-    public string[] fishNames; // Array de nombres de peces
+    public GameObject[] fishPrefabs; // Array dels prefabs dels peixos
+    public string[] fishNames; // Array dels noms dels peixos
     [TextArea(3, 10)]
-    public string[] fishDescriptions; // Array de descripciones de peces
+    public string[] fishDescriptions; // Array de les descripcions dels peixos
 
     private UIManager uiManager; // Referencia al gestor de UI
 
     void Start()
     {
-        // Busca el UIManager en la escena. Asegúrate de que solo haya uno.
+        //busca la UIManager en la escena.
         uiManager = FindObjectOfType<UIManager>();
-        if (uiManager == null)
-        {
-            Debug.LogError("No se encontró un UIManager en la escena.");
-        }
+
     }
 
-    // Esta función será llamada desde otro script cuando se toque esta sombra
+    //función es truca des de altre script quan toqui l'ombra
     public void RevealFish()
     {
         if (fishPrefabs != null && fishPrefabs.Length > 0)
         {
-            // Seleccionar un pez al azar
+            // selecciona un peix random
             int randomIndex = Random.Range(0, fishPrefabs.Length);
             GameObject selectedFishPrefab = fishPrefabs[randomIndex];
             string selectedFishName = fishNames[randomIndex];
@@ -36,38 +33,24 @@ public class ShadowInteraction : MonoBehaviour
             // Instanciar el pez en la posición de la sombra
             GameObject fish = Instantiate(selectedFishPrefab, transform.position, transform.rotation);
 
-            // Fijarlo a la cámara para que se mueva con ella
+            //fixar la cam per que es mogui amb ella
             if (Camera.main != null)
             {
                 fish.transform.SetParent(Camera.main.transform, false);
                 fish.transform.localPosition = new Vector3(0, 0.2f, 1.0f);
                 fish.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-
-
-
             }
             else
             {
-                Debug.LogWarning("No se encontró la cámara principal.");
+                Debug.LogWarning("no s'ha detectat una cam principal");
             }
 
-            // Enviar la referencia del pez al UIManager
-            if (uiManager != null)
-            {
-                uiManager.SetCurrentFish(fish);
-                uiManager.ShowFishInfo(selectedFishName, selectedFishDescription);
-            }
-            else
-            {
-                Debug.LogWarning("UIManager no encontrado, no se puede mostrar la info.");
-            }
+            //envia la ref del peix a la UIManager
+            uiManager.SetCurrentFish(fish);
+            uiManager.ShowFishInfo(selectedFishName, selectedFishDescription);
 
-            // Destruir el objeto sombra
             Destroy(gameObject);
         }
-        else
-        {
-            Debug.LogError("¡No hay prefabs de peces asignados en el Inspector!");
-        }
+
     }
 }

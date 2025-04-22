@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Nou sistema d'input
+using UnityEngine.InputSystem; 
 
 public class RotateFish : MonoBehaviour
 {

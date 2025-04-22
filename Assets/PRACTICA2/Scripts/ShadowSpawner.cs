@@ -7,18 +7,14 @@ public class ShadowSpawner : MonoBehaviour
 {
     public GameObject FishShadow;
     public float fishDensity = 1f; // número de peixos per m²
-    public float fishRadius = 0.4f; // Radi utilitzat per comprovar solapametns
+    public float fishRadius = 0.4f; // Radi utilitzat per comprovar solapaments
 
     private Dictionary<ARPlane, int> fishCountByPlane = new Dictionary<ARPlane, int>();
     private ARPlaneManager planeManager; // Guardar referencia para OnDisable
 
-    void Awake() // Usar Awake para encontrar referencias antes de OnEnable
+    void Awake() //Awake per trobar references abans de OnEnable
     {
         planeManager = FindObjectOfType<ARPlaneManager>();
-        if (planeManager == null)
-        {
-            Debug.LogError("ARPlaneManager no encontrado!");
-        }
     }
 
     void OnEnable()
@@ -26,7 +22,6 @@ public class ShadowSpawner : MonoBehaviour
         if (planeManager != null)
         {
             planeManager.planesChanged += OnPlanesChanged;
-            Debug.Log("ShadowSpawner suscrito a planesChanged.");
         }
     }
 
@@ -35,11 +30,9 @@ public class ShadowSpawner : MonoBehaviour
         if (planeManager != null)
         {
             planeManager.planesChanged -= OnPlanesChanged;
-            Debug.Log("ShadowSpawner desuscrito de planesChanged.");
-            // Tambi?n desuscribirse de boundaryChanged si los planos a?n existen
             foreach (var plane in fishCountByPlane.Keys)
             {
-                if (plane != null) // Comprobar si el plano a?n existe
+                if (plane != null) //comprovar si el pla encara existeix
                 {
                     plane.boundaryChanged -= OnPlaneBoundaryChanged;
                 }
@@ -49,13 +42,10 @@ public class ShadowSpawner : MonoBehaviour
 
     void OnPlanesChanged(ARPlanesChangedEventArgs args)
     {
-        //Debug.Log($"Planes changed: Added={args.added.Count}, Updated={args.updated.Count}, Removed={args.removed.Count}");
-
         foreach (ARPlane plane in args.added)
         {
-            if (!fishCountByPlane.ContainsKey(plane)) // Evitar a?adir si ya existe por alguna raz?n
+            if (!fishCountByPlane.ContainsKey(plane)) 
             {
-                Debug.Log($"Plano a?adido: {plane.trackableId}, suscribiendo a boundaryChanged.");
                 fishCountByPlane[plane] = 0;
                 plane.boundaryChanged += OnPlaneBoundaryChanged;
                 UpdateFishOnPlane(plane);
@@ -64,18 +54,15 @@ public class ShadowSpawner : MonoBehaviour
 
         foreach (ARPlane plane in args.updated)
         {
-            if (fishCountByPlane.ContainsKey(plane) && plane.subsumedBy == null) // Asegurarse que el plano a?n es v?lido
+            if (fishCountByPlane.ContainsKey(plane) && plane.subsumedBy == null) //asegurar si el pla encara es valid
             {
-                // Podr?as querer actualizar solo si el boundary o tama?o cambi? significativamente
-                // Debug.Log($"Plano actualizado: {plane.trackableId}.");
                 UpdateFishOnPlane(plane);
             }
         }
 
         foreach (ARPlane plane in args.removed)
         {
-            Debug.Log($"Plano eliminado: {plane.trackableId}, desuscribiendo y eliminando del diccionario.");
-            // Destruir sombras asociadas a este plano
+            //destruir ombres del pla
             foreach (Transform child in plane.transform)
             {
                 if (child.CompareTag("FishShadow"))
@@ -83,10 +70,9 @@ public class ShadowSpawner : MonoBehaviour
                     Destroy(child.gameObject);
                 }
             }
-            // Desuscribirse del evento y eliminar del diccionario
-            if (plane != null) // El objeto podr?a haber sido destruido ya
+            if (plane != null) 
             {
-                plane.boundaryChanged -= OnPlaneBoundaryChanged;
+                plane.boundaryChanged -= OnPlaneBoundaryChanged;//limits del pla
             }
             if (fishCountByPlane.ContainsKey(plane))
             {
@@ -97,7 +83,6 @@ public class ShadowSpawner : MonoBehaviour
 
     void OnPlaneBoundaryChanged(ARPlaneBoundaryChangedEventArgs eventArgs)
     {
-        Debug.Log($"Boundary cambiado para el plano: {eventArgs.plane.trackableId}");
         UpdateFishOnPlane(eventArgs.plane);
     }
 
@@ -105,20 +90,18 @@ public class ShadowSpawner : MonoBehaviour
     {
         if (plane == null || plane.subsumedBy != null || plane.trackingState != UnityEngine.XR.ARSubsystems.TrackingState.Tracking)
         {
-            // No generar peces en planos no validos, subsumidos (?) o que no se esten trackeando activamente
             return;
         }
 
         //calcula l'area del pla i quan pexios tocarien
-        float area = plane.size.x * plane.size.y; // Usar plane.size es m?s directo que extents
+        float area = plane.size.x * plane.size.y; 
         int desiredFishCount = Mathf.FloorToInt(area * fishDensity);
 
         int currentFishCount = fishCountByPlane.ContainsKey(plane) ? fishCountByPlane[plane] : 0;
         int fishToSpawn = desiredFishCount - currentFishCount;
 
-        if (fishToSpawn <= 0) return; // No necesitamos generar m?s peces
+        if (fishToSpawn <= 0) return; 
 
-        Debug.Log($"Actualizando plano {plane.trackableId}: Area={area:F2}, Desired={desiredFishCount}, Current={currentFishCount}, Spawning={fishToSpawn}");
 
 
         //pels solapaments
@@ -132,7 +115,6 @@ public class ShadowSpawner : MonoBehaviour
 
             if (IsPositionFree(spawnPos, fishRadius))
             {
-                // Instanciar como hijo del plano para que se mueva con ?l
                 GameObject fish = Instantiate(FishShadow, spawnPos, Quaternion.identity, plane.transform);
                 fish.tag = "FishShadow"; // per detectar-ho més endavant si es necessita
                 spawned++;
@@ -140,56 +122,37 @@ public class ShadowSpawner : MonoBehaviour
             tries++;
         }
 
-        if (spawned > 0)
-            Debug.Log($"Generados {spawned} peces en el plano {plane.trackableId}. Intentos: {tries}.");
-
-
         if (fishCountByPlane.ContainsKey(plane))
             fishCountByPlane[plane] += spawned;
         else
-            fishCountByPlane[plane] = spawned; // Esto no deber?a pasar si se a?adi? correctamente en OnPlanesChanged
+            fishCountByPlane[plane] = spawned;
     }
 
-    // Retorna un punto aleatorio dentro de los l?mites del plano
+    // Retorna un punto aleatorio dentro de los l?mites del plano  retorna un punt aleatori dins dels lim dels plans
     Vector3 GetRandomPointInPlaneBounds(ARPlane plane)
     {
-        // Genera un punto aleatorio dentro del rect?ngulo delimitador 2D del plano
+        // genera un punt aleatori dins del rectangle
         float randomX = Random.Range(-plane.size.x / 2f, plane.size.x / 2f);
         float randomZ = Random.Range(-plane.size.y / 2f, plane.size.y / 2f);
         Vector3 localPos = new Vector3(randomX, 0, randomZ);
 
-        // Convierte la posici?n local (relativa al centro del plano) a posici?n mundial
         return plane.transform.TransformPoint(localPos);
     }
 
-
-    // Comprueba si la posici?n est? libre de otros objetos shadow
     bool IsPositionFree(Vector3 position, float radius)
     {
-        // Considera solo la capa donde est?n las sombras si las tienes en una capa espec?fica
-        // int layerMask = 1 << LayerMask.NameToLayer("TuCapaDeSombras");
-        // Collider[] overlaps = Physics.OverlapSphere(position, radius, layerMask);
-
         Collider[] overlaps = Physics.OverlapSphere(position, radius);
         foreach (Collider col in overlaps)
         {
-            // Comprobar si el objeto encontrado es OTRA sombra (no uno mismo si el prefab tuviera este script)
-            if (col.CompareTag("FishShadow") && col.transform.position != position) // Evita auto-colisi?n inicial
+            if (col.CompareTag("FishShadow") && col.transform.position != position) 
                 return false;
         }
         return true;
     }
 
-    // << NUEVO: M?todo p?blico para resetear el estado interno
     public void ResetSpawner()
     {
-        Debug.Log("Reseteando ShadowSpawner...");
-        // Limpiar el diccionario. Las sombras f?sicas se destruyen desde UIManager
         fishCountByPlane.Clear();
 
-        // Desuscribirse de eventos de planos que puedan quedar referenciados (aunque Reset() deber?a eliminarlos)
-        // El c?digo en OnDisable/OnPlanesChanged(removed) deber?a manejar esto si se llama correctamente.
-        // Por seguridad, podr?amos iterar y desuscribir, pero puede ser complejo si los planos ya no existen.
-        // Confiaremos en que ARSession.Reset() + OnPlanesChanged(removed) limpien correctamente.
     }
 }

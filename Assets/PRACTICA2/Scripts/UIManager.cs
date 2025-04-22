@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.XR.ARFoundation; // Necesario para ARSession
+using UnityEngine.XR.ARFoundation; 
 using UnityEngine.XR.ARSubsystems;
-using System; // Necesario para ARSessionState
+using System; 
 
 public class UIManager : MonoBehaviour
 {
@@ -13,57 +13,23 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI fishNameText;
     public TextMeshProUGUI fishDescriptionText;
     public Button closeButton;
-    public Button restartButton; // << NUEVO: Referencia al botón de reiniciar
+    public Button restartButton; 
 
-    // Referencias a componentes AR necesarios para reiniciar
-    public ARSession arSession;         // << NUEVO: Asignar el objeto AR Session desde el Inspector
-    public ARPlaneManager planeManager; // << NUEVO: Asignar el AR Plane Manager desde el Inspector
-    public ShadowSpawner shadowSpawner; // << NUEVO: Asignar el objeto que tiene ShadowSpawner
+    public ARSession arSession;        
+    public ARPlaneManager planeManager; 
+    public ShadowSpawner shadowSpawner; 
 
     private GameObject currentFish;
 
     void Start()
     {
-        if (infoPanel != null)
-        {
-            infoPanel.SetActive(false);
-        }
+        infoPanel.SetActive(false);
+        closeButton.onClick.AddListener(HideFishInfo);
+        restartButton.onClick.AddListener(RestartARSession);
+        arSession = FindObjectOfType<ARSession>();
+        planeManager = FindObjectOfType<ARPlaneManager>();
+        shadowSpawner = FindObjectOfType<ShadowSpawner>();
 
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(HideFishInfo);
-        }
-        else
-        {
-            Debug.LogWarning("Botón de cerrar no asignado en UIManager.");
-        }
-
-        // << NUEVO: Añadir listener para el botón de reiniciar
-        if (restartButton != null)
-        {
-            restartButton.onClick.AddListener(RestartARSession);
-        }
-        else
-        {
-            Debug.LogWarning("Botón de reiniciar no asignado en UIManager.");
-        }
-
-        // << NUEVO: Buscar referencias si no están asignadas (opcional, mejor asignar en Inspector)
-        if (arSession == null)
-        {
-            arSession = FindObjectOfType<ARSession>();
-            if (arSession == null) Debug.LogError("ARSession no encontrado en la escena.");
-        }
-        if (planeManager == null)
-        {
-            planeManager = FindObjectOfType<ARPlaneManager>();
-            if (planeManager == null) Debug.LogError("ARPlaneManager no encontrado en la escena.");
-        }
-        if (shadowSpawner == null)
-        {
-            shadowSpawner = FindObjectOfType<ShadowSpawner>();
-            if (shadowSpawner == null) Debug.LogError("ShadowSpawner no encontrado en la escena.");
-        }
     }
 
     public void SetCurrentFish(GameObject fish)
@@ -73,7 +39,6 @@ public class UIManager : MonoBehaviour
 
     public void ShowFishInfo(string name, string description)
     {
-        // ... (código existente sin cambios)
         if (infoPanel != null && fishNameText != null && fishDescriptionText != null)
         {
             fishNameText.text = name;
@@ -88,7 +53,6 @@ public class UIManager : MonoBehaviour
 
     public void HideFishInfo()
     {
-        // ... (código existente sin cambios)
         if (infoPanel != null)
         {
             infoPanel.SetActive(false);
@@ -101,46 +65,29 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // << NUEVO: Método que se llamará al pulsar el botón Reiniciar
+    //metode que es trucara al clicar el boto de reiniciar
     public void RestartARSession()
     {
-        Debug.Log("Reiniciando sesión AR...");
 
-        // 1. Ocultar panel de info y destruir pez actual si existe
-        HideFishInfo();
+        HideFishInfo(); //oculta el panel de info i destrueix el peix
 
-        // 2. Destruir todas las sombras de peces existentes
+        //destrueix les ombres dels peixos
         GameObject[] existingShadows = GameObject.FindGameObjectsWithTag("FishShadow");
-        Debug.Log($"Encontradas {existingShadows.Length} sombras para destruir.");
         foreach (GameObject shadow in existingShadows)
         {
             Destroy(shadow);
         }
 
-        // 3. Resetear el estado interno del ShadowSpawner (opcional pero recomendado)
+        //resetear el joc
         if (shadowSpawner != null)
         {
-            shadowSpawner.ResetSpawner(); // Necesitaremos añadir este método a ShadowSpawner
+            shadowSpawner.ResetSpawner(); 
         }
-
-        // 4. Resetear la sesión AR y la detección de planos
         if (arSession != null)
         {
-            arSession.Reset(); // Esto reinicia el tracking y elimina los trackables existentes (planos)
-        }
-        else
-        {
-            Debug.LogError("ARSession no asignada, no se puede reiniciar.");
+            arSession.Reset(); 
         }
 
-        // Opcional: Deshabilitar y rehabilitar el Plane Manager puede ser una alternativa si Reset() no funciona como esperado
-        // if (planeManager != null)
-        // {
-        //    planeManager.enabled = false;
-        //    planeManager.enabled = true;
-        // }
-
-        Debug.Log("Sesión AR reiniciada. Buscando nuevos planos...");
     }
 
     public bool IsInfoPanelActive()//per enviar la si està activat al InputManager
